@@ -37,6 +37,8 @@ function load_mailbox(mailbox) {
     load_inbox(mailView);
   } else if (mailbox == 'sent') {
     load_sent(mailView);
+  } else if (mailbox == 'archive') {
+    load_archive(mailView);
   }
 
 
@@ -64,9 +66,47 @@ function mailOpen(id) {
          <div class="">Body: ${email.body}</div></br>
          <div class="">Timestamp: ${email.timestamp}</div></br>
       </div>`;
+      if (email.read == false){
+        fetch(`/emails/${id}`, {
+          method: 'PUT',
+          body: JSON.stringify({
+            read: true
+          })
+        });
+      }
+
+      if (email.archived == false){
+        mailView.innerHTML += `<button class="btn btn-warning" onclick="archive(${email.id})">Archive</button>`;
+      }else{
+        mailView.innerHTML += `<button class="btn btn-secondary" onclick="unarchive(${email.id})">Unarchive</button>`;
+      }
       
     });
 }
+
+
+function archive(id) {
+  console.log(id);
+  fetch(`/emails/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify({
+      archived: true
+    })
+  });
+  load_mailbox('inbox');
+}
+
+function unarchive(id) {
+  console.log(id);
+  fetch(`/emails/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify({
+      archived: false
+    })
+  });
+  load_mailbox('inbox');
+}
+
 
 function load_inbox(mailView) {
 
@@ -76,16 +116,36 @@ function load_inbox(mailView) {
       // Print emails
       console.log(emails);
       mailView.innerHTML = emails.map((email) => {
-        return (
-          `<div onclick="mailOpen(${email.id})" class="row">
+      
+        return ( `<div onclick="mailOpen(${email.id})" class="row card" ${email.read ? 'style="background: grey"': ''}>
          <div class="col-3">${email.sender}</div>
          <div class="col-6">${email.subject}</div>
          <div class="col-3">${email.timestamp}</div>
       </div>`);
+      
       });
 
     });
 
+}
+
+function load_archive(mailView) {
+  fetch('/emails/archive')
+    .then(response => response.json())
+    .then(emails => {
+      // Print emails
+      console.log(emails);
+      mailView.innerHTML = emails.map((email) => {
+      
+        return ( `<div onclick="mailOpen(${email.id})" class="row card">
+         <div class="col-3">${email.sender}</div>
+         <div class="col-6">${email.subject}</div>
+         <div class="col-3">${email.timestamp}</div>
+      </div>`);
+      
+      });
+
+    });
 }
 
 function load_sent(mailView) {
