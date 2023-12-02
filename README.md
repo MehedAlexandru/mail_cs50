@@ -40,10 +40,3 @@ To logout, click on the "Logout" button at the top.
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](^2^) file for more details.
-
-Source: Conversation with Bing, 12/2/2023
-(1) How to Write a Good README File for Your GitHub Project - freeCodeCamp.org. https://www.freecodecamp.org/news/how-to-write-a-good-readme-file/.
-(2) README.md: What Is It, How To Create It Yourself. https://markdown.land/readme-md.
-(3) Creating Dynamic README.md File - DEV Community. https://dev.to/jacktt/creating-dynamic-readmemd-file-388o.
-(4) readmeai · PyPI. https://pypi.org/project/readmeai/.
-(5) Final Project - CS50x 2022. https://cs50.harvard.edu/x/2022/project/.
